@@ -1,4 +1,4 @@
 ﻿using System;
 using Aoc2021;
 
-Console.WriteLine(Day1.Part2());
+Console.WriteLine(Day2.Part2());
