@@ -3,7 +3,7 @@ using Aoc2021.Lib;
 
 namespace Aoc2021
 {
-    public class Day3
+    public class Day03
     {
         public static int Part1()
         {

@@ -3,7 +3,7 @@ using Aoc2021.Lib;
 
 namespace Aoc2021
 {
-    public class Day2
+    public class Day02
     {
         private static readonly Dictionary<string, (int x, int d)> vectors = new()
         {

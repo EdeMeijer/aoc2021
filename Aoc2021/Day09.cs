@@ -4,7 +4,7 @@ using Aoc2021.Lib;
 
 namespace Aoc2021
 {
-    public class Day9
+    public class Day09
     {
         private static readonly (int y, int x)[] offsets = { (-1, 0), (1, 0), (0, -1), (0, 1) };
 

@@ -3,7 +3,7 @@ using Aoc2021.Lib;
 
 namespace Aoc2021
 {
-    public class Day1
+    public class Day01
     {
         public static int Part1() => CountIncrements(LoadInput());
 

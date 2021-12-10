@@ -4,7 +4,7 @@ using Aoc2021.Lib;
 
 namespace Aoc2021
 {
-    public class Day7
+    public class Day07
     {
         public static long Part1() => Solve(d => d);
 

@@ -6,7 +6,7 @@ using Aoc2021.Lib;
 
 namespace Aoc2021
 {
-    public class Day4
+    public class Day04
     {
         private static readonly Regex Whitespace = new("\\s+");
 
