@@ -23,7 +23,7 @@ namespace Aoc2021.Lib
 
             if (benchmark)
             {
-                Console.WriteLine($"Runtime = {sw.ElapsedMilliseconds}ms");
+                Console.WriteLine($"Runtime = {sw.Elapsed}");
             }
 
             Console.WriteLine("======== PART 2 ========");
@@ -31,7 +31,7 @@ namespace Aoc2021.Lib
             Console.WriteLine($"Answer = {part2()}");
             if (benchmark)
             {
-                Console.WriteLine($"Runtime = {sw.ElapsedMilliseconds}ms");
+                Console.WriteLine($"Runtime = {sw.Elapsed}");
             }
         }
     }

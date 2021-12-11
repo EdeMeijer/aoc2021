@@ -19,9 +19,13 @@ namespace Aoc2021.Lib
 
         IEnumerable<T> Col(int x);
 
+        IEnumerable<(int y, int x)> Coords { get; }
+
         IMatrix<T> Clone();
 
         IMatrix<T> With(int y, int x, T value);
+
+        bool Contains(int y, int x);
 
         IMatrix<T> RotateCw();
 
@@ -67,6 +71,19 @@ namespace Aoc2021.Lib
             }
         }
 
+        public IEnumerable<(int y, int x)> Coords
+        {
+            get
+            {
+                for (var y = 0; y < Height; y ++)
+                {
+                    for (var x = 0; x < Width; x ++)
+                    {
+                        yield return (y, x);
+                    }
+                }
+            }
+        }
 
         public IMatrix<T> Clone() => new Matrix<T>(Height, Width, Values.ToList());
 
