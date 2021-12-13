@@ -34,7 +34,7 @@ namespace Aoc2021.Lib
         IMatrix<T> Slice(int y, int height, int x, int width);
     }
 
-    public abstract class AbstractMatrix<T>  : IMatrix<T> where T : IEquatable<T>
+    public abstract class AbstractMatrix<T> : IMatrix<T> where T : IEquatable<T>
     {
         public abstract int Height { get; }
         public abstract int Width { get; }
@@ -248,9 +248,9 @@ namespace Aoc2021.Lib
 
         private int IndexOf(int y, int x)
         {
-            if (x < 0 || y < 0 || x >= Width || y >= Width)
+            if (x < 0 || y < 0 || x >= Width || y >= Height)
             {
-                throw new ArgumentException("Invalid coordinate");
+                throw new ArgumentException($"Invalid coordinate ({y},{x}) (height={Height},width={Width})");
             }
 
             return y * Width + x;

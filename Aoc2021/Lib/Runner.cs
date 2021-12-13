@@ -19,7 +19,7 @@ namespace Aoc2021.Lib
 
             Console.WriteLine("======== PART 1 ========");
             var sw = Stopwatch.StartNew();
-            Console.WriteLine($"Answer = {part1()}");
+            Console.WriteLine(part1());
 
             if (benchmark)
             {
@@ -28,7 +28,7 @@ namespace Aoc2021.Lib
 
             Console.WriteLine("======== PART 2 ========");
             sw.Restart();
-            Console.WriteLine($"Answer = {part2()}");
+            Console.WriteLine(part2());
             if (benchmark)
             {
                 Console.WriteLine($"Runtime = {sw.Elapsed}");
