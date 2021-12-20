@@ -2,7 +2,7 @@
 using Aoc2021.Lib;
 
 Runner.Run(
-    Day19.Part1,
-    Day19.Part2,
+    Day20.Part1,
+    Day20.Part2,
     false
 );
