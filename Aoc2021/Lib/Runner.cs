@@ -20,19 +20,12 @@ namespace Aoc2021.Lib
             Console.WriteLine("======== PART 1 ========");
             var sw = Stopwatch.StartNew();
             Console.WriteLine(part1());
-
-            if (benchmark)
-            {
-                Console.WriteLine($"Runtime = {sw.Elapsed}");
-            }
+            Console.WriteLine($"Runtime = {sw.Elapsed}");
 
             Console.WriteLine("======== PART 2 ========");
             sw.Restart();
             Console.WriteLine(part2());
-            if (benchmark)
-            {
-                Console.WriteLine($"Runtime = {sw.Elapsed}");
-            }
+            Console.WriteLine($"Runtime = {sw.Elapsed}");
         }
     }
 }
