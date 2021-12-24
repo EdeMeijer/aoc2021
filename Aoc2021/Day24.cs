@@ -4,17 +4,27 @@ public class Day24
 {
     public static long Part1()
     {
-        var result = 0L;
-        Solve(13, 0, 0, ref result);
-
-        return result;
+        return result.Value.biggest;
     }
 
-    public static int Part2()
+    public static long Part2()
     {
-        return 0;
+        return result.Value.smallest;
     }
 
+    private static readonly Lazy<(long biggest, long smallest)> result;
+
+    static Day24()
+    {
+        result = new Lazy<(long biggest, long smallest)>(Solve);
+    }
+    
+    private static (long biggest, long smallest) Solve()
+    {
+        var (biggest, smallest) = (0L, long.MaxValue);
+        Solve(13, 0, 0, ref smallest, ref biggest);
+        return (biggest, smallest);
+    }
 
     private static readonly int[] modX = { 10, 11, 14, 13, -6, -14, 14, 13, -8, -15, 10, -11, -13, -4 };
     private static readonly int[] modY = { 1, 9, 12, 6, 9, 15, 7, 12, 15, 3, 6, 2, 10, 12 };
@@ -22,7 +32,7 @@ public class Day24
 
     private static readonly Dictionary<(int step, int zOut), List<(int digit, List<int> zIn)>> cache = new();
 
-    private static void Solve(int step, int zOut, long sequence, ref long result)
+    private static void Solve(int step, int zOut, long sequence, ref long resultMin, ref long resultMax)
     {
         var inputs = GetValidInputs(step, zOut);
 
@@ -37,16 +47,19 @@ public class Day24
                     if (zIn == 0)
                     {
                         // Found a valid sequence
-                        Console.WriteLine(tmpSeq);
-                        if (tmpSeq > result)
+                        if (tmpSeq > resultMax)
                         {
-                            result = tmpSeq;
+                            resultMax = tmpSeq;
+                        }
+                        if (tmpSeq < resultMin)
+                        {
+                            resultMin = tmpSeq;
                         }
                     }
                     continue;
                 }
                 
-                Solve(step - 1, zIn, tmpSeq, ref result);
+                Solve(step - 1, zIn, tmpSeq, ref resultMin, ref resultMax);
             }
         }
     }
@@ -71,17 +84,17 @@ public class Day24
         }
 
         result = new List<(int digit, List<int> zIns)>();
+        var zInCandidates = GenerateZInCandidates(zOut);
         
         for (var digit = 1; digit <= 9; digit ++)
         {
             var zIns = new List<int>();
             
-            foreach (var zIn in GenerateZInCandidates(zOut))
+            foreach (var zIn in zInCandidates)
             {
                 var z = EvalBlock(step, digit, zIn);
                 if (z == zOut)
                 {
-                    // Console.WriteLine($"step {step}  {zIn} => {zOut}  (modZ={modZ[step]})");
                     zIns.Add(zIn);
                 }
             }
@@ -97,16 +110,19 @@ public class Day24
         return result;
     }
 
-    private static IEnumerable<int> GenerateZInCandidates(int zOut)
+    private static HashSet<int> GenerateZInCandidates(int zOut)
     {
+        var result = new HashSet<int>();
         int[] points = { zOut / 26, zOut, zOut * 26 };
         foreach (var point in points)
         {
-            for (var zIn = point - 100; zIn <= point + 100; zIn ++)
+            for (var zIn = point - 25; zIn <= point + 25; zIn ++)
             {
-                yield return zIn;
+                result.Add(zIn);
             }
         }
+
+        return result;
     }
 
     private static int EvalBlock(int step, int digit, int zPrev)
@@ -128,9 +144,5 @@ public class Day24
         z += y1;
 
         return z;
-        
-        
-        // var mask = digit == ((zPrev % 26) + modX[step]) ? 0 : 1;
-        // return ((digit + modY[step]) * mask) + (((mask * 25) + 1) * (zPrev / modZ[step]));
     }
 }
