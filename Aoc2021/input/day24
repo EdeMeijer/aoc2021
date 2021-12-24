@@ -1,0 +1,80 @@
+inp w       inp w      inp w       inp w       inp w       inp w       inp w       inp w      inp w        inp w       inp w      inp w       inp w       inp w   
+mul x 0     mul x 0    mul x 0     mul x 0     mul x 0     mul x 0     mul x 0     mul x 0    mul x 0      mul x 0     mul x 0    mul x 0     mul x 0     mul x 0   
+add x z     add x z    add x z     add x z     add x z     add x z     add x z     add x z    add x z      add x z     add x z    add x z     add x z     add x z   
+mod x 26    mod x 26   mod x 26    mod x 26    mod x 26    mod x 26    mod x 26    mod x 26   mod x 26     mod x 26    mod x 26   mod x 26    mod x 26    mod x 26  
+div z 1     div z 1    div z 1     div z 1     div z 26    div z 26    div z 1     div z 1    div z 26     div z 26    div z 1    div z 26    div z 26    div z 26  
+add x 10    add x 11   add x 14    add x 13    add x -6    add x -14   add x 14    add x 13   add x -8     add x -15   add x 10   add x -11   add x -13   add x -4  
+eql x w     eql x w    eql x w     eql x w     eql x w     eql x w     eql x w     eql x w    eql x w      eql x w     eql x w    eql x w     eql x w     eql x w   
+eql x 0     eql x 0    eql x 0     eql x 0     eql x 0     eql x 0     eql x 0     eql x 0    eql x 0      eql x 0     eql x 0    eql x 0     eql x 0     eql x 0   
+mul y 0     mul y 0    mul y 0     mul y 0     mul y 0     mul y 0     mul y 0     mul y 0    mul y 0      mul y 0     mul y 0    mul y 0     mul y 0     mul y 0   
+add y 25    add y 25   add y 25    add y 25    add y 25    add y 25    add y 25    add y 25   add y 25     add y 25    add y 25   add y 25    add y 25    add y 25  
+mul y x     mul y x    mul y x     mul y x     mul y x     mul y x     mul y x     mul y x    mul y x      mul y x     mul y x    mul y x     mul y x     mul y x   
+add y 1     add y 1    add y 1     add y 1     add y 1     add y 1     add y 1     add y 1    add y 1      add y 1     add y 1    add y 1     add y 1     add y 1   
+mul z y     mul z y    mul z y     mul z y     mul z y     mul z y     mul z y     mul z y    mul z y      mul z y     mul z y    mul z y     mul z y     mul z y   
+mul y 0     mul y 0    mul y 0     mul y 0     mul y 0     mul y 0     mul y 0     mul y 0    mul y 0      mul y 0     mul y 0    mul y 0     mul y 0     mul y 0   
+add y w     add y w    add y w     add y w     add y w     add y w     add y w     add y w    add y w      add y w     add y w    add y w     add y w     add y w   
+add y 1     add y 9    add y 12    add y 6     add y 9     add y 15    add y 7     add y 12   add y 15     add y 3     add y 6    add y 2     add y 10    add y 12  
+mul y x     mul y x    mul y x     mul y x     mul y x     mul y x     mul y x     mul y x    mul y x      mul y x     mul y x    mul y x     mul y x     mul y x   
+add z y     add z y    add z y     add z y     add z y     add z y     add z y     add z y    add z y      add z y     add z y    add z y     add z y     add z y   
+
+
+10, 11, 14, 13, -6, -14, 14, 13, -8, -15, 10, -11, -13, -4
+
+
+
+1.      Read next digit into W
+2-3.    Set X to Z
+4.      X = X % 26
+5.      Divide Z by 26 or 1 depending on digit (1 1 1 1 26 26 1 1 26 26 1 26 26 26)
+6.      Add step-specific value to X
+7-8.    Set X to X == W ? 0 : 1 (7 compares, 8 inverts)
+9-10.   Set Y to 25
+11.     Multiply Y by X (Y = YX). Acts as a mask to set Y to 0 when X == W
+12.     Y++ (so now Y is 1 or 26)
+13.     Z = ZY
+14-15.  Set Y to W
+16.     Add step specific value to Y
+17.     Y = YX
+18:     Z += Y
+
+
+Dus, Z loopt constant door.
+
+
+
+Ik moet het grootst geldige 14 digit nummer vinden. We kunnen dus greedily elk nummer maximaliseren. Oh nee. We 
+moeten zorgen dat Z uiteindelijk op 0 komt.
+
+
+
+Voor de laatste stap moet het resultaat 0 zijn. Dat lukt alleen als de masking operatie 0 geeft, want anders krijgen
+we altijd iets > 0. Hoewel... aan de andere kant wordt er altijd vermenigvuldigd met 1 of 26. Dan moet de andere input
+wel negatief zijn om op 0 uit te komen. Of Z moet 0 zijn... 
+
+Als z _altijd_ 0 moet zijn, kunnen we elk blokje individueel oplossen. Maar lijkt me onwaarschijnlijk.
+
+Anders: we weten dat de laatste Z 0 moet zijn. Op basis daarvan kunnen we voor de laatste stap alle geldige Z inputs
+bepalen. Want ik denk dat die niet eindeloos groot kan zijn. Als die te groot wordt... dan div je hem wel door 26,
+is het nog steeds groot. Dan wordt het minstens met 1 vermenigvuldigd, is het nog steeds groot. De andere branch
+moet het dan neutraliseren, maar die is eindig omdat het 0 is, of digit + fixed value (<= 15), dus max 24. Dus de
+input op laatste + mag niet kleiner zijn dan -24 voor de laatste stap.
+
+Hmm dus we krijgen een mapping van [digit] -> [valid input Z]. voor het laatste digit.
+Het digit ervoor, kunnen we dan voor elke digit weer alle geldige input Z's bepalen. De truc is nu dat we de union van
+alle geldige Zs kunnen gebruiken voor de volgende stap.
+
+Misschien moeten we een cache hebben van (step, z_out) die ons alle mogelijke input digits geeft en bijbehorende
+mogelijke z_in values. Als we dat hebben... dan kunnen we vrij snel een depth first search doen door alle geldige
+inputs?
+
+
+
+
+
+
+
+
+
+
+
+
